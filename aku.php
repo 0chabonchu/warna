@@ -1,33 +1,11 @@
 <?php
 
+require 'vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class Colors {
-    private $foreground_colors = array();
-
-    public function __construct() {
-        $this->foreground_colors = array(
-            '0' => '0;30', '1' => '1;30', // Black - Dark Gray
-            '2' => '0;34', '3' => '1;34', // Blue - Light Blue
-            '4' => '0;32', '5' => '1;32', // Green - Light Green
-            '6' => '0;36', '7' => '1;36', // Cyan - Light Cyan
-            '8' => '0;31', '9' => '1;31', // Red - Light Red
-            '10' => '0;35', '11' => '1;35', // Purple - Light Purple
-            '12' => '0;33', '13' => '1;33', // Brown - Yellow
-            '14' => '0;37', '15' => '1;37'  // Light Gray - White
-        );
-    }
-
-    // Returns colored string
-    public function getColoredString($string, $foreground_color = null) {
-        $colored_string = "";
-
-        if (isset($this->foreground_colors[$foreground_color])) {
-            $colored_string .= "\033[" . $this->foreground_colors[$foreground_color] . "m";
-        }
-
-        $colored_string .=  $string . "\033[0m";
-
-        return $colored_string;
-    }
+    // previous code
 }
 
 // Create new Colors class
@@ -43,4 +21,40 @@ $text = readline("Masukkan teks yang ingin diubah warnanya: ");
 $color_number = readline("Masukkan nomor warna (0-15): ");
 
 echo $colors->getColoredString($text, $color_number);
+
+$name = readline("Masukkan nama: ");
+$address = readline("Masukkan alamat lengkap: ");
+$birthdate = readline("Masukkan tanggal lahir (format YYYY-MM-DD): ");
+$birthplace = readline("Masukkan kota lahir: ");
+$gender = readline("Masukkan jenis kelamin: ");
+$last_education = readline("Masukkan pendidikan terakhir: ");
+
+$data = [
+    'Nama' => $name,
+    'Alamat' => $address,
+    'Tanggal Lahir' => $birthdate,
+    'Kota Lahir' => $birthplace,
+    'Jenis Kelamin' => $gender,
+    'Pendidikan Terakhir' => $last_education
+];
+
+$file = fopen("data.txt", "w");
+fwrite($file, json_encode($data));
+fclose($file);
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->setFrom('ytpremio2023@gmail.com', 'Mailer');
+    $mail->addAddress('eko@et.co.id', 'Eko');     // Add a recipient
+
+    $mail->isHTML(true);                            // Set email format to HTML
+    $mail->Subject = 'Data Pengguna';
+    $mail->Body    = 'Berikut data pengguna: <pre>' . json_encode($data, JSON_PRETTY_PRINT) . '</pre>';
+
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
 ?>
