@@ -4,22 +4,16 @@ class Colors {
     private $foreground_colors = array();
 
     public function __construct() {
-        $this->foreground_colors['black'] = '0;30';
-        $this->foreground_colors['dark_gray'] = '1;30';
-        $this->foreground_colors['blue'] = '0;34';
-        $this->foreground_colors['light_blue'] = '1;34';
-        $this->foreground_colors['green'] = '0;32';
-        $this->foreground_colors['light_green'] = '1;32';
-        $this->foreground_colors['cyan'] = '0;36';
-        $this->foreground_colors['light_cyan'] = '1;36';
-        $this->foreground_colors['red'] = '0;31';
-        $this->foreground_colors['light_red'] = '1;31';
-        $this->foreground_colors['purple'] = '0;35';
-        $this->foreground_colors['light_purple'] = '1;35';
-        $this->foreground_colors['brown'] = '0;33';
-        $this->foreground_colors['yellow'] = '1;33';
-        $this->foreground_colors['light_gray'] = '0;37';
-        $this->foreground_colors['white'] = '1;37';
+        $this->foreground_colors = array(
+            '0' => '0;30', '1' => '1;30', // Black - Dark Gray
+            '2' => '0;34', '3' => '1;34', // Blue - Light Blue
+            '4' => '0;32', '5' => '1;32', // Green - Light Green
+            '6' => '0;36', '7' => '1;36', // Cyan - Light Cyan
+            '8' => '0;31', '9' => '1;31', // Red - Light Red
+            '10' => '0;35', '11' => '1;35', // Purple - Light Purple
+            '12' => '0;33', '13' => '1;33', // Brown - Yellow
+            '14' => '0;37', '15' => '1;37'  // Light Gray - White
+        );
     }
 
     // Returns colored string
@@ -34,14 +28,19 @@ class Colors {
 
         return $colored_string;
     }
-
-    // Returns all foreground color names
-    public function getForegroundColors() {
-        return array_keys($this->foreground_colors);
-    }
 }
 
+// Create new Colors class
 $colors = new Colors();
 
-echo $colors->getColoredString("Test String", "blue");
+echo "Daftar warna:\n";
+echo "0: Black, 1: Dark Gray, 2: Blue, 3: Light Blue\n";
+echo "4: Green, 5: Light Green, 6: Cyan, 7: Light Cyan\n";
+echo "8: Red, 9: Light Red, 10: Purple, 11: Light Purple\n";
+echo "12: Brown, 13: Yellow, 14: Light Gray, 15: White\n";
+
+$text = readline("Masukkan teks yang ingin diubah warnanya: ");
+$color_number = readline("Masukkan nomor warna (0-15): ");
+
+echo $colors->getColoredString($text, $color_number);
 ?>
